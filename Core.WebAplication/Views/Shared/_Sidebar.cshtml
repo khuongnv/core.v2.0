@@ -1,0 +1,117 @@
+﻿@using Core.WebAplication.Common
+@using Core.Models
+<div id="sidebar" class="sidebar responsive  ace-save-state">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('sidebar')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+            <button class="btn btn-primary">
+                <i class="ace-icon fa fa-signal"></i>
+            </button>
+
+            <button class="btn btn-info">
+                <i class="ace-icon fa fa-pencil"></i>
+            </button>
+
+            <button class="btn btn-warning">
+                <i class="ace-icon fa fa-users"></i>
+            </button>
+
+            <button class="btn btn-default">
+                <i class="ace-icon fa fa-cogs"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+            <span class="btn btn-primary"></span>
+
+            <span class="btn btn-info"></span>
+
+            <span class="btn btn-warning"></span>
+
+            <span class="btn btn-danger"></span>
+        </div>
+    </div><!-- /.sidebar-shortcuts -->
+
+    <ul class="nav nav-list">
+        @{ 
+
+            var userInfo = SessionInfo.UserInfo;
+            var menus = userInfo.ListMenu;
+
+            foreach (var parentMenu in menus.Where(x => x.MENU_CHA_ID < 1).OrderBy(x => x.THU_TU))
+            {
+
+                var hasChildMenu = menus.Where(x => x.MENU_CHA_ID == parentMenu.ID).Count() > 0;
+
+            <li class="" id="@($"mnuItem{parentMenu.ID}")">
+                <a href="@(string.IsNullOrEmpty(parentMenu.URL) ? "#" : Url.Content($"{parentMenu.URL}"))" @(hasChildMenu ? "class=dropdown-toggle" : "")
+                   id="menu-1-@parentMenu.ID">
+                    <i class="menu-icon fa @parentMenu.BIEU_TUONG"></i>                    
+                    <span class="menu-text">
+                        @parentMenu.TEN
+                    </span>
+
+                    @if (hasChildMenu)
+                    {
+                        <b class='arrow fa fa-angle-down'></b>
+                    }
+                </a>
+
+                @if (hasChildMenu)
+                {
+                    <ul class="submenu">
+                        @foreach (var childMenu in menus.Where(c => c.MENU_CHA_ID == parentMenu.ID))
+                        {
+                            var hasChildMenu2 = menus.Where(x => x.MENU_CHA_ID == childMenu.ID).Count() > 0;
+
+                            <li class="" id="@($"mnuItem{childMenu.ID}")">
+                                <a href="@(string.IsNullOrEmpty(childMenu.URL) ? "#" : Url.Content($"{childMenu.URL}"))" @(hasChildMenu2 ? "class=dropdown-toggle" : "")>
+                                    <i class="menu-icon fa @parentMenu.BIEU_TUONG"></i>                 
+                                    @childMenu.TEN
+                                    @if (hasChildMenu2)
+                                    {
+                                        <b class="arrow fa fa-angle-down"></b>
+                                    }
+                                </a>
+                                <b class="arrow"></b>
+
+                                @if (hasChildMenu2)
+                                {
+                                    <ul class="submenu">
+                                        @foreach (var childMenu2 in menus.Where(x => x.MENU_CHA_ID == childMenu.ID))
+                                        {
+                                            <li class="" id="@($"mnuItem{childMenu2.ID}")">
+                                                <a href="@Url.Content($"{childMenu2.URL}")">
+                                                    <i class="menu-icon fa @parentMenu.BIEU_TUONG"></i>
+                                                    @childMenu2.TEN
+                                                </a>
+                                                <b class="arrow"></b>
+                                            </li>
+
+
+                                        }
+                                    </ul>
+                                }
+
+                            </li>
+                        }
+
+                    </ul>
+                }
+
+            </li>
+                }
+            }
+
+    </ul><!-- /.nav-list -->
+
+    <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+        <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+    </div>
+</div>

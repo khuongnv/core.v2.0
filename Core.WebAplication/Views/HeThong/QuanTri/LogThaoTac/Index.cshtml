@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Log thao tác";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript" src="~/assets/Scripts/table2excel.js"></script>
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="#">Trang chủ</a>
+        </li>
+        <li>
+            Hệ thống
+        </li>
+        <li class="active">
+            Quản trị
+        </li>
+    </ul><!-- /.breadcrumb -->
+</div>
+
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            Quản trị
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                Log thao tác
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <form role="form" id="searchForm" class="form-horizontal">
+                <div class="form-group form-inline">
+                </div>
+            </form>
+            <div class="clearfix"></div>
+            <div class="row">                
+                <div class="col-md-5 padding-left-2">
+                    <button type="button" id="btnSearch" class="btn btn-blue btn-sm pull-left ">
+                        <i class="fa fa-search" aria-hidden="true"></i> Tìm kiếm
+                    </button>
+                </div>
+            </div>
+            <div class="form-group form-inline">
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="divGrid" class="col-sm-12 no-padding">
+                        <div id="divAjaxLoading-Sm" style="text-align:center; font-size:1.1em">
+                            Đang tải dữ liệu<img src="@Url.Content("~/assets/images/loadding.gif")" alt="loadding" />
+                        </div>
+                        <div id="divTongHop"></div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div><!-- PAGE CONTENT ENDS -->
+    </div>
+</div>
+<div id="AddOrEditModal" class="modal fade" role="dialog" style="z-index: 1600;">
+    <div class="modal-dialog modal-sm">
+    </div>
+</div>
+
+<script>        
+        $(document).ready(function () {
+            LoadDataList();
+            $("#btnSearch").on("click", function () {
+                LoadDataList();
+            });
+
+
+        });
+        function LoadDataList() {
+
+        var frmDataPost = $('#searchForm').serializeArray();
+
+        $.ajax({
+            url: '@Url.Action("LogUserThaoTac")',
+            type: "POST",
+            data: frmDataPost,
+            success: function (result) {
+                $('#divAjaxLoading-Sm').hide();
+                $("#divTongHop").html(result);
+                $('#TableTongHop').DataTable(getTableConfig());  
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    };
+   
+</script>
+
+
+
+<style>
+    .fixed {
+        top: 0;
+        position: fixed;
+        width: auto;
+        display: none;
+        border: none;
+        z-index: 4;
+    }
+
+    .table thead th {
+        background-color: #dff0d8;
+    }
+</style>

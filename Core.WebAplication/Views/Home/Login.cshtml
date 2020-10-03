@@ -1,0 +1,78 @@
+﻿@using Core.Common;
+@using Core.Models;
+@using Core.Models.Input;
+@using Core.WebAplication.Common;
+@{
+    ViewBag.Title = "Đăng nhập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .fixed {
+        top: 0;
+        position: fixed;
+        width: auto;
+        display: none;
+        border: none;
+        z-index: 4;
+    }
+
+    .table thead th {
+        background-color: #dff0d8;
+    }
+</style>
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="#">Trang chủ</a>
+        </li>
+        <li class="active">
+            Đăng nhập
+        </li>
+    </ul><!-- /.breadcrumb -->
+</div>
+@model LoginModel
+<div class="panel panel-default login-panel">
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "form-signin", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        if (ViewData["ActionReturn"] != null)
+        {
+            var actionReturn = (ActionReturn)ViewData["ActionReturn"];
+            <div class="@(actionReturn.Code == Constants.ActionReturn.Error ? "alert alert-danger" : "alert alert-success")" role="alert">
+                @actionReturn.Message
+            </div>
+        }
+        <h2 class="form-signin-heading">Đăng nhập</h2>
+        <fieldset>
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Tên đăng nhập" })
+            <br />
+            @Html.HiddenFor(m => m.RedirectUrl)
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Mật khẩu" })
+            <input type="checkbox" /> <span>Ghi nhớ</span>
+            <div class="form-group" style="text-align: center">
+                <input type="submit" id="btnSubmit" class="btn btn-default" value="Đăng nhập">
+            </div>
+            @*<input type="submit" class="btn btn-lg btn-primary" value=@LoginResource.SignInButton />*@
+            <footer class="clearfix">
+                <p><span class="info">?</span><a href="http://portal.vnpt.vn/">Quên mật khẩu</a></p>
+            </footer>
+        </fieldset>
+    }
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-exclamation-sign text-warning medium"></span>&nbsp;&nbsp;<b><u>Chú ý:</u></b></div>
+    <div class="panel-body">
+        <p>Hệ thống sử dụng xác thực qua account portal của tập đoàn VNPT. Vui lòng truy nhập <a href="http://portal.vnpt.vn">http://portal.vnpt.vn</a> để xem các thông tin chi tiết.</p>
+        <div class="row">
+            <div class="col-md-1"><span class="glyphicon glyphicon-share-alt"></span></div>
+            <div class="col-md-3">Hướng dẫn đổi mật khẩu:</div>
+            <div class="col-md-8">Sử dụng số điện thoại (đã đăng ký kèm với account), nhắn tin với cú pháp <span class="syntax">MP username</span> gửi <span class="syntax">993</span>(Ví dụ đổi password của tuht, soạn <span class="syntax">MP tuht</span> gửi <span class="syntax">993</span> Hệ thống sẽ tự động gửi SMS kèm password mới vào số điện thoại cho người dùng.</div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"><span class="glyphicon glyphicon-share-alt"></span></div>
+            <div class="col-md-3">Hướng dẫn đổi số điện thoại:</div>
+            <div class="col-md-8">Liên hệ quản trị (tổng đài <span class="syntax">18001268</span> số máy lẻ <span class="syntax">101, 103, 105</span>) để đăng ký lại hoặc sử dụng email &#64;vnpt.vn của mình gửi đăng ký thay đổi số điện thoại vào <span class="syntax">postmaster&#64;vnpt.vn</span></div>
+        </div>
+    </div>
+</div>

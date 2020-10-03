@@ -1,0 +1,124 @@
+﻿@using Core.WebAplication.Common
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - HỆ THỐNG BÁO CÁO KHỐI VĂN PHÒNG - VNPT HÀ NỘI</title>
+
+    @Styles.Render("~/assets/css/bootstrap")
+    @Styles.Render("~/assets/css/jqueryui")
+    @Styles.Render("~/assets/css/fontAwesome")
+    @Styles.Render("~/assets/css/fontGoogle")
+    @Styles.Render("~/assets/css/plugins")
+    @Styles.Render("~/assets/css/DateTimeCss")
+    @Styles.Render("~/assets/libs/fancytree/dist/skin-win8/FancyTreeJs")
+    @Styles.Render("~/Plugins/iCheck/iCheckCss")
+    @*@Styles.Render("~/assets/css/site")*@
+
+    <link href="~/assets/css/Site.css" rel="stylesheet" />
+    @Scripts.Render("~/assets/scripts/modernizr")
+    @Scripts.Render("~/assets/scripts/jquery")
+    @Scripts.Render("~/assets/scripts/jqueryval")
+    @Scripts.Render("~/assets/scripts/unobtrusive")
+    @Scripts.Render("~/assets/scripts/bootstrap")
+    @Scripts.Render("~/assets/scripts/moment")
+    @Scripts.Render("~/assets/scripts/jqueryplugin")
+    @Scripts.Render("~/assets/scripts/bootstrapplugin")
+    @Scripts.Render("~/assets/scripts/chosen")
+    @Scripts.Render("~/assets/scripts/select2")
+    @Scripts.Render("~/assets/scripts/DateTimeJs")
+    @Scripts.Render("~/assets/scripts/dataTable")
+    @Scripts.Render("~/assets/scripts/button")
+    @Scripts.Render("~/assets/scripts/toast/toastJs")
+    @Scripts.Render("~/assets/scripts/bootbox/bootboxJs")
+    @Scripts.Render("~/assets/libs/fancytree/dist/fancytreeJs")
+    @Scripts.Render("~/assets/scripts/plugins")
+    @Scripts.Render("~/assets/scripts/site")
+    <script src="~/Scripts/jquery.tmpl.js"></script>
+</head>
+<body class="no-skin">
+    <div id="divAjaxLoading-Lg" class="ajax-loading-overlay" style="display:none">
+        <div class="ajax-overlay-body">
+            <div style="position:absolute; top:40%; left:50%;">
+                <img src="@Url.Content("~/assets/images/loadding.gif")" />
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("~/Views/Shared/_Header.cshtml")
+    @{var userInfo = SessionInfo.UserInfo;}
+    @{
+        if (userInfo != null)
+        {
+            <span class="navbar-toggle" style="border: 0px; background-color: transparent">               
+                @using (Html.BeginForm("Logout", "Home", FormMethod.Post, new { id = "logoutForm" }))
+                {
+                    @Html.AntiForgeryToken()                    
+                }
+            </span>
+        }
+    }
+    <div class="main-container ace-save-state" id="main-container">
+        <script type="text/javascript">
+            try {
+                ace.settings.loadState('main-container')
+            } catch (e) {
+            }
+        </script>
+
+        @Html.Partial("~/Views/Shared/_Sidebar.cshtml")
+
+        <div class="main-content">
+            <div class="main-content-inner">
+                @*@Html.Partial("~/Views/Shared/Notification/Notification.cshtml")*@
+
+                @RenderBody()
+
+            </div>
+        </div><!-- /.main-content -->
+
+        @Html.Partial("~/Views/Shared/_Footer.cshtml")
+    </div><!-- /.main-container -->
+    <div id="smModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        </div>
+    </div>
+
+    <div id="lgModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+        </div>
+    </div>
+    <div id="xlModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function () {
+
+            var current = location.pathname.toUpperCase();
+            var alias = '/CNTT';
+            if (current == '/' || current == '/HOME/INDEX' || current == alias || current == alias + '/') {
+                $('ul.nav-list li:first').addClass('open active')
+            }
+            else {
+                $('ul.nav-list li a').each(function () {
+                    var $this = $(this);
+                    // if the current path is like this link, make it active
+                    if ($this.attr('href').toUpperCase().indexOf(current) !== -1) {
+                        $this.closest('li').addClass('active');
+                        $this.closest('li').parent().parent().addClass('open active');
+                    }
+                });
+            }
+
+        });
+
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

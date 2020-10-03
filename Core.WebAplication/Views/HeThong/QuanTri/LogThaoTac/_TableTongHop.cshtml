@@ -1,0 +1,92 @@
+﻿@using Core.Models
+@using Core.Models.Entities
+@using Core.Models.Output
+@model ResultModel<List<LogThaoTacModel>>
+
+<div class="table-header">
+    <i class="ace-icon fa fa-list"></i>
+    LOG THAO TÁC
+    <div class="pull-right padding-right-5" style="font-size: 12px; ">
+        <div class="col-xs-12">
+            <a href="javascript:void(0)" onclick="ExportExcel();" class="pull-right tooltip-info" data-placement="left" data-toggle="tooltip" title="Xuất excel">
+                <i class="ace-icon fa fa-file-excel-o bigger-120 white "> Excel</i>
+            </a>
+        </div>
+    </div>
+</div>
+<table class="table table-responsive table-striped table-bordered" id="TableTongHop" style="display: table;">
+
+    <thead>
+        <tr>
+            <th class="center" style="text-align: center;">
+                STT
+            </th>
+            <th class="center">
+                LOG_THAO_TAC_ID
+            </th>
+            <th class="center">
+                Người thực hiện
+            </th>
+            <th class="center">
+                Thời điểm thực hiện
+            </th>
+            <th class="center">
+                Nội dung thực hiện
+            </th>
+            <th class="center">
+                Mô tả
+            </th>
+            <th class="center">
+                Target ID
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Data != null)
+        {
+            foreach (var item in Model.Data)
+            {
+
+                <tr>
+                    <td style="text-align: center">
+                        @item.STT
+                    </td>
+                    <td style="text-align: center">@item.LOG_THAO_TAC_ID</td>
+                    <td>@item.NGUOI_THAO_TAC</td>
+                    <td>@item.TG_THUC_HIEN</td>
+                    <td>@item.NOI_DUNG_THUC_HIEN</td>
+                    <td>@item.MO_TA</td>
+                    <td>@item.TARGET_ID</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <p>Không có dữ liệu</p>
+        }
+    </tbody>
+</table>
+<style>
+    .sumTable {
+        background: orange !important;
+    }
+</style>
+<script>
+    function ExportExcel() {
+        var ut = new Date();
+        var year, month, day, h, m, s;
+        var time = "";
+        year = ut.getFullYear();
+        month = ut.getMonth();
+        day = ut.getDate();
+        h = ut.getHours();
+        m = ut.getMinutes();
+        s = ut.getSeconds();
+        time = year + "" + month + "" + day + "" + h + "" + m + "" + s;
+        $("#TableTongHop").table2excel({
+            name: "LOG_THAO_TAC",
+            filename: "LOG_THAO_TAC" + time,
+            fileext: ".xls"
+        });
+    };
+</script>
