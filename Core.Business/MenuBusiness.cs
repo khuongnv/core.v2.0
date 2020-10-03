@@ -9,21 +9,24 @@ using Core.Models.Entities;
 using Core.Models.Input;
 using Core.Models.Output;
 using Core.Common;
-
+using Core.Extension;
 namespace Core.Business
 {
     
     public class MenuBusiness: BaseBusiness
     {
         private readonly MenuRepository repository;
+        private readonly MenuExtension extension;
 
         public MenuBusiness()
         {
-            repository = new MenuRepository();            
+            repository = new MenuRepository();
+            extension = new MenuExtension();
         }        
         public ResultModel<List<DM_MENU>> GetAllMenu()
         {
-            return repository.GetAllMenu();
+            //return repository.GetAllMenu();          
+            return extension.GetAllMenu(); ;
         }
         public ResultModel<DM_MENU> GetAllMenuById(long menuId)
         {            

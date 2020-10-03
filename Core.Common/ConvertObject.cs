@@ -31,6 +31,6 @@ namespace Core.Common
                 result.Add((T)row);
             }
             return result;
-        }
+        }        
     }
 }

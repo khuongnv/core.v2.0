@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionReturn.cs" />
+    <Compile Include="ApiResultOfDataSetModel.cs" />
     <Compile Include="ApiResultModel.cs" />
     <Compile Include="Entities\DM_DON_VI.cs" />
     <Compile Include="Output\LogThaoTacSearchResultModel.cs" />

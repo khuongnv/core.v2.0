@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Common;
-
+using Core.Models;
+using Core.Models.Entities;
 namespace Core.Business
 {
     public class BaseBusiness
@@ -16,6 +17,6 @@ namespace Core.Business
         public void HandleBOExceptions(Exception ex)
         {
             ExceptionHandlers.Handle(ex, ExceptionTypes.BUSINESS_EXCEPTION);
-        }
+        }        
     }
 }

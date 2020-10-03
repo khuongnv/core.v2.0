@@ -46,6 +46,14 @@ namespace Core.Common
         {
         }
     }
+    public class ExtentionException : Exception
+    {
+
+        public ExtentionException(Exception inner)
+            : base("Lỗi khi sử dụng Extension.", inner)
+        {
+        }
+    }
     /// <summary>
     /// Xử lý ngoại lệ
     /// </summary>
@@ -68,6 +76,7 @@ namespace Core.Common
     {
         BASE_DAO_EXCEPTION,
         REPOSITORY_EXCEPTION,
+        BASE_EXTENSION_EXCEPTION,
         BUSINESS_EXCEPTION,
         WEB_EXCEPTION
     }
