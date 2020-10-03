@@ -61,9 +61,12 @@ namespace Core.WebAplication.Common
         }
         public sealed class SsoUrl
         {
-            public const string SsoApiUrl = "http://10.10.40.184/api/api/";
-            public const string SsoLinkUrl = "http://10.10.40.184/sso/account/SSOLogOn";
-            public const string SsoLogOutUrl = "http://10.10.40.184/SSO/account/logoff";
+            //public const string SsoApiUrl = "http://10.10.40.184/api/api/";
+            //public const string SsoLinkUrl = "http://10.10.40.184/sso/account/SSOLogOn";
+            //public const string SsoLogOutUrl = "http://10.10.40.184/SSO/account/logoff";
+            public const string SsoApiUrl = "https://id.hanoi.vnpt.vn/api/api/";
+            public const string SsoLinkUrl = "https://id.hanoi.vnpt.vn/account/SSOLogOn";
+            public const string SsoLogOutUrl = "https://id.hanoi.vnpt.vn/account/logoff";
         }
         public static string ServerUrl => $"{HttpContext.Current.Request.Url.Scheme}://{HttpContext.Current.Request.Url.Authority}{new UrlHelper(HttpContext.Current.Request.RequestContext).Content("~")}";
     }

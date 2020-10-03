@@ -40,14 +40,14 @@
 
     <ul class="nav nav-list">
         @{ 
+            
+                var userInfo = SessionInfo.UserInfo;
+                var menus = userInfo.ListMenu;
 
-            var userInfo = SessionInfo.UserInfo;
-            var menus = userInfo.ListMenu;
+                foreach (var parentMenu in menus.Where(x => x.MENU_CHA_ID < 1).OrderBy(x => x.THU_TU))
+                {
 
-            foreach (var parentMenu in menus.Where(x => x.MENU_CHA_ID < 1).OrderBy(x => x.THU_TU))
-            {
-
-                var hasChildMenu = menus.Where(x => x.MENU_CHA_ID == parentMenu.ID).Count() > 0;
+                    var hasChildMenu = menus.Where(x => x.MENU_CHA_ID == parentMenu.ID).Count() > 0;
 
             <li class="" id="@($"mnuItem{parentMenu.ID}")">
                 <a href="@(string.IsNullOrEmpty(parentMenu.URL) ? "#" : Url.Content($"{parentMenu.URL}"))" @(hasChildMenu ? "class=dropdown-toggle" : "")
@@ -106,9 +106,9 @@
                 }
 
             </li>
+                    }
                 }
-            }
-
+            
     </ul><!-- /.nav-list -->
 
     <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">

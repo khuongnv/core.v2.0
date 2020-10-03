@@ -15,7 +15,7 @@ namespace Core.Extension
             var result = new ResultModel<List<DM_MENU>>();            
             try
             {
-                result = ConvertToResultModel<DM_MENU>(GetAll(0, "DM_MENU"));
+                result = ConvertToResultModel<DM_MENU>(GetAll(ApiUrl.MainDataBaseId, "DM_MENU"));
             }
             catch (Exception ex)
             {

@@ -90,39 +90,40 @@ namespace Core.WebAplication.Common
                                 //userInfoModel.USER_NAME = "abcasdasd";
                                 userInfoModel.USER_NAME = result.Data.TenDangNhap;
                                 //_IsLogged = LogOn(0, result.Data, filterContext.HttpContext);
-                                QuanTriBusiness qt = new QuanTriBusiness();
-                                LogBusiness log = new LogBusiness();
-                                var user = new ResultModel<DM_NHAN_VIEN>();
+                                MenuBusiness _menu = new MenuBusiness();
+                                //LogBusiness log = new LogBusiness();
+                                //var user = new ResultModel<DM_NHAN_VIEN>();
                                 //user = qt.LoginSuccess("abc");                               
-                                user = qt.LoginSuccess(result.Data.TenDangNhap);
+                                //user = qt.LoginSuccess(result.Data.TenDangNhap);
                                 //Log đăng nhập
-                                if (filterContext.HttpContext.Request.ServerVariables["LOCAL_ADDR"] != "127.0.0.1"
-                                    && filterContext.HttpContext.Request.ServerVariables["LOCAL_ADDR"] != "::1"
-                                    )
-                                {
-                                    log.LogDangNhap(result.Data.TenDangNhap, HttpContext.Current.Session.SessionID, 1,
-                                    filterContext.HttpContext.Request.ServerVariables["LOCAL_ADDR"],
-                                    filterContext.HttpContext.Request.ServerVariables["REMOTE_ADDR"],
-                                    filterContext.HttpContext.Request.Browser.Browser,
-                                    1);
-                                }    
-                                if (!user.IsError)
-                                {
-                                    userInfoModel.ID = user.Data.ID;
-                                    userInfoModel.ROLE = user.Data.ROLE;
-                                    userInfoModel.DON_VI_ID = user.Data.DON_VI_ID;
-                                    //Lấy danh sách quyền Menu                
-                                    //userInfoModel.ListMenu = qt.GetMenuByNhanvien(user.Data.ID).Data;
-                                    if (userInfoModel.ROLE == Constants.Role.SuperAdmin)
-                                    {
-                                        userInfoModel.ListMenu = qt.GetAllMenu().Data;
-                                    }
-                                    else
-                                    {
-                                        userInfoModel.ListMenu = qt.GetMenuByNhanvien(user.Data.ID).Data;
-                                    }                                                                    
-                                    
-                                }
+                                //if (filterContext.HttpContext.Request.ServerVariables["LOCAL_ADDR"] != "127.0.0.1"
+                                //    && filterContext.HttpContext.Request.ServerVariables["LOCAL_ADDR"] != "::1"
+                                //    )
+                                //{
+                                //    log.LogDangNhap(result.Data.TenDangNhap, HttpContext.Current.Session.SessionID, 1,
+                                //    filterContext.HttpContext.Request.ServerVariables["LOCAL_ADDR"],
+                                //    filterContext.HttpContext.Request.ServerVariables["REMOTE_ADDR"],
+                                //    filterContext.HttpContext.Request.Browser.Browser,
+                                //    1);
+                                //}    
+                                //if (!user.IsError)
+                                //{
+                                //    userInfoModel.ID = user.Data.ID;
+                                //    userInfoModel.ROLE = user.Data.ROLE;
+                                //    userInfoModel.DON_VI_ID = user.Data.DON_VI_ID;
+                                //    //Lấy danh sách quyền Menu                
+                                //    //userInfoModel.ListMenu = qt.GetMenuByNhanvien(user.Data.ID).Data;
+                                //    if (userInfoModel.ROLE == Constants.Role.SuperAdmin)
+                                //    {
+                                //        userInfoModel.ListMenu = qt.GetAllMenu().Data;
+                                //    }
+                                //    else
+                                //    {
+                                //        userInfoModel.ListMenu = qt.GetMenuByNhanvien(user.Data.ID).Data;
+                                //    }                                                                    
+
+                                //}
+                                userInfoModel.ListMenu = _menu.GetAllMenu().Data;
                                 userInfoModel.HeThongId = 1;
                                 //Gán vào CommonLib.UserInfo <-> MySession.UserInfo.
                                 SessionInfo.UserInfo = userInfoModel;

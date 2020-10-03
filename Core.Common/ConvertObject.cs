@@ -15,20 +15,27 @@ namespace Core.Common
         public static List<T> DataSetToList<T>(DataSet dataSet)
         {
             var result = new List<T>();
-            var dataTable = dataSet.Tables;
-            var dt = dataTable[0];
-            foreach (DataRow dataRow in dt.Rows)
+            if (dataSet != null)
             {
-                var row = Activator.CreateInstance<T>();
-                var propertyInfos = typeof(T).GetProperties();
-                foreach (var ppi in propertyInfos)
+                var dataTable = dataSet.Tables;
+                var dt = dataTable[0];
+                foreach (DataRow dataRow in dt.Rows)
                 {
-                    var name = ppi.Name.ToUpper();                    
-                    if (!dataRow.Table.Columns.Contains(name)) continue;
-                    var value = dataRow[name];
-                    ppi.SetValue(row, Convert.ChangeType(value, ppi.PropertyType), null);                    
+                    var row = Activator.CreateInstance<T>();
+                    var propertyInfos = typeof(T).GetProperties();
+                    foreach (var ppi in propertyInfos)
+                    {
+                        var name = ppi.Name.ToUpper();
+                        if (!dataRow.Table.Columns.Contains(name)) continue;
+                        var value = dataRow[name];
+                        try
+                        {
+                            ppi.SetValue(row, Convert.ChangeType(value, ppi.PropertyType), null);
+                        }
+                        catch { continue; }                        
+                    }
+                    result.Add((T)row);
                 }
-                result.Add((T)row);
             }
             return result;
         }        

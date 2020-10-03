@@ -48,42 +48,49 @@ namespace Core.WebAplication.Controllers
 
         public ActionResult Login(LoginModel model)
         {
-            //Xac thuc user
-            QuanTriBusiness qt = new QuanTriBusiness();
-            var user = new ResultModel<DM_NHAN_VIEN>();
-            user = qt.CheckAccount(model.UserName, model.Password);
-            if (user.IsError == true)
-            {
-                ViewData["ActionReturn"] = Json(new ActionReturn { Code = Constants.ActionReturn.Error, Message = user.Message}, JsonRequestBehavior.AllowGet);;
-                return View();
-            }
-            else
-            {                
-                UserInfoModel userInfoModel = new UserInfoModel();
-                userInfoModel.USER_NAME = user.Data.USER_NAME;
-                userInfoModel.ID = user.Data.ID;
-                userInfoModel.ROLE = user.Data.ROLE;
-                //Lấy danh sách quyền Menu                
-                //userInfoModel.ListMenu = qt.GetMenuByNhanvien(user.Data.ID).Data;
-                if (userInfoModel.ROLE == Constants.Role.SuperAdmin)
-                {
-                    userInfoModel.ListMenu = qt.GetAllMenu().Data;
-                }
-                else
-                {
-                    userInfoModel.ListMenu = qt.GetMenuByNhanvien(user.Data.ID).Data;
-                }
-                //Lấy các quyền nghiệp vụ (tương tự)   
-                userInfoModel.HeThongId = 1;
-                //Gán vào CommonLib.UserInfo <-> MySession.UserInfo.
-                SessionInfo.UserInfo = userInfoModel;
-                if (!string.IsNullOrEmpty(model.RedirectUrl))
-                {
-                    return Redirect(model.RedirectUrl);
-                }
-                return Redirect(Constants.ServerUrl);
 
+            MenuBusiness _menu = new MenuBusiness();
+            UserInfoModel userInfoModel = new UserInfoModel();
+            userInfoModel.USER_NAME = model.UserName;
+            userInfoModel.ID = 1;
+            userInfoModel.ROLE = Constants.Role.SuperAdmin;
+            userInfoModel.ListMenu = _menu.GetAllMenu().Data;
+            userInfoModel.HeThongId = 1;
+            //Xac thuc user
+            //QuanTriBusiness qt = new QuanTriBusiness();
+            //var user = new ResultModel<DM_NHAN_VIEN>();
+            //user = qt.CheckAccount(model.UserName, model.Password);
+            //if (user.IsError == true)
+            //{
+            //    ViewData["ActionReturn"] = Json(new ActionReturn { Code = Constants.ActionReturn.Error, Message = user.Message}, JsonRequestBehavior.AllowGet);;
+            //    return View();
+            //}
+            //else
+            //{                
+            //    UserInfoModel userInfoModel = new UserInfoModel();
+            //    userInfoModel.USER_NAME = user.Data.USER_NAME;
+            //    userInfoModel.ID = user.Data.ID;
+            //    userInfoModel.ROLE = user.Data.ROLE;
+            //    //Lấy danh sách quyền Menu                
+            //    //userInfoModel.ListMenu = qt.GetMenuByNhanvien(user.Data.ID).Data;
+            //    if (userInfoModel.ROLE == Constants.Role.SuperAdmin)
+            //    {
+            //        userInfoModel.ListMenu = qt.GetAllMenu().Data;
+            //    }
+            //    else
+            //    {
+            //        userInfoModel.ListMenu = qt.GetMenuByNhanvien(user.Data.ID).Data;
+            //    }
+            //    //Lấy các quyền nghiệp vụ (tương tự)   
+            //    userInfoModel.HeThongId = 1;
+            //    //Gán vào CommonLib.UserInfo <-> MySession.UserInfo.
+            SessionInfo.UserInfo = userInfoModel;
+            if (!string.IsNullOrEmpty(model.RedirectUrl))
+            {
+                return Redirect(model.RedirectUrl);
             }
-        }
+            return Redirect(Constants.ServerUrl);
+
+        }    
     }
 }

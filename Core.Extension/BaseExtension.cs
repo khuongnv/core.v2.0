@@ -17,7 +17,7 @@ namespace Core.Extension
             ExceptionHandlers.Handle(ex, ExceptionTypes.BASE_EXTENSION_EXCEPTION);
 
         }
-        public ApiResultOfDataSetModel GetData(UriParameter paraInfo)
+        public ApiResultModel<DataSet> GetData(UriParameter paraInfo)
         {
             //Gọi API để validate key
             using (var client = new HttpClient())
@@ -30,29 +30,39 @@ namespace Core.Extension
                 //Nếu sử dụng API để get phân quyền thì truyền thêm tham số
                 var response = client.PostAsync("TraCuu/GetData", paraInfo, new JsonMediaTypeFormatter()).Result;
                 if (!response.IsSuccessStatusCode) return null;
-                var result = response.Content.ReadAsAsync<ApiResultOfDataSetModel>().Result;
+                var result = response.Content.ReadAsAsync<ApiResultModel<DataSet>>().Result;
                 return result;
             }
 
         }
-        public ApiResultOfDataSetModel GetAll(long dataBaseId, string tableName)
+        public ApiResultModel<DataSet> GetAll(long dataBaseId, string tableName)
         {
-            var result = new ApiResultOfDataSetModel();
+            var result = new ApiResultModel<DataSet>();
             try
             {
-                var _tableName = new ThamSoThuTuc
-                {
-                    TEN = "pTableName",
-                    GIA_TRI = tableName,
-                    KIEU_DU_LIEU = "VARCHAR2"
+
+                var _listThamSoIn = new List<ThamSoThuTuc>() {
+                    new ThamSoThuTuc 
+                    { 
+                        TEN = "pTableName".ToUpper(),
+                        GIA_TRI = tableName,
+                        KIEU_DU_LIEU = "VARCHAR2"
+                    }
                 };
-                var _listThamSoIn = new List<ThamSoThuTuc>();
-                _listThamSoIn.Add(_tableName);
+
+                var _listThamSoOut = new List<ThamSoThuTuc>() {
+                    new ThamSoThuTuc {
+                        TEN = "pData".ToUpper(),
+                        KIEU_DU_LIEU = "CURSOR"
+                    }
+                };
+
                 var paraInfo = new UriParameter
                 {
                     DatabaseId = dataBaseId,
-                    TenThuTuc = "PKG_DANH_MUC.GetAllTable",
-                    listThamSoIn = _listThamSoIn
+                    TenThuTuc = "PKG_COMMON.GetAllTable",
+                    listThamSoIn = _listThamSoIn,
+                    listThamSoOut = _listThamSoOut
                 };
                 result = GetData(paraInfo);
             }
@@ -62,14 +72,14 @@ namespace Core.Extension
             }
             return result;
         }
-        public ApiResultOfDataSetModel GetAllById(long dataBaseId, string tableName, string idName, long id)
+        public ApiResultModel<DataSet> GetAllById(long dataBaseId, string tableName, string idName, long id)
         {
-            var result = new ApiResultOfDataSetModel();
+            var result = new ApiResultModel<DataSet>();
             try
             {
                 var _tableName = new ThamSoThuTuc
                 {
-                    TEN = "pTableName",
+                    TEN = "pTableName".ToUpper(),
                     GIA_TRI = tableName,
                     KIEU_DU_LIEU = "VARCHAR2"
                 };
@@ -81,11 +91,19 @@ namespace Core.Extension
                 };
                 var _listThamSoIn = new List<ThamSoThuTuc>();
                 _listThamSoIn.Add(_tableName);
+                _listThamSoIn.Add(_id);
+                var _listThamSoOut = new List<ThamSoThuTuc>();
+                _listThamSoOut.Add(new ThamSoThuTuc
+                {
+                    TEN = "pData".ToUpper(),
+                    KIEU_DU_LIEU = "CURSOR"
+                });
                 var paraInfo = new UriParameter
                 {
                     DatabaseId = dataBaseId,
-                    TenThuTuc = "PKG_DANH_MUC.GetAllTableById",
-                    listThamSoIn = _listThamSoIn
+                    TenThuTuc = "PKG_COMMON.GetAllTableById",
+                    listThamSoIn = _listThamSoIn,
+                    listThamSoOut = _listThamSoOut
                 };
                 result = GetData(paraInfo);
             }
@@ -95,7 +113,7 @@ namespace Core.Extension
             }
             return result;
         }
-        public ResultModel<List<T>> ConvertToResultModel<T>(ApiResultOfDataSetModel model)
+        public ResultModel<List<T>> ConvertToResultModel<T>(ApiResultModel<DataSet> model)
         {
             var result = new ResultModel<List<T>>();
             try
